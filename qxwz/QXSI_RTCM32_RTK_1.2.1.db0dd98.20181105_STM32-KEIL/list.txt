@@ -1,0 +1,17 @@
+*发布包文件列表
+---------------
+├── demo
+│   └── main.c
+├── doc
+│   ├── 差分数据嵌入式SDK开发指南_V2.0.2
+│   └── 千寻SDK网络层接口指南.docx
+│ 
+├── include
+│   ├── qxwz_sdk.h
+│   ├── qxwz_socket.h
+│   ├── qxwz_status.h
+│   └── qxwz_types.h
+├── lib
+│   └── qxwz_sdk.lib
+├── release_note.txt
+└── list.txt

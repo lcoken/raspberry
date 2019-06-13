@@ -1,0 +1,18 @@
+华为4G网卡接口信息
+
+
+enp0s20f0u2c2 Link encap:Ethernet  HWaddr 02:1e:10:1f:00:00  
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+
+
+
+1. ssh pi@192.168.0.43 
+2. sudo wvdial hw1 (use config file in /etc/wvdial.conf) keep alive background.
+3. sudo route del default gw 192.168.0.1
+4. sudo route add -net 0.0.0.0 gw 10.64.64.64 dev ppp0
+5. ping -I ppp0 www.baidu.com

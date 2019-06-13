@@ -1,0 +1,64 @@
+1. 版本历史: 
+*千寻SDK Version
+---------------
+v1.2.1, 2018.11.02.17:36
+v1.2.0, 2017.12.10.17:41
+v1.1.0, 2017.12.05.15:33
+v1.0.0, 2017.11.25.16:28
+
+*千寻change list
+----------------
+v1.2.1
+-代码优化。
+
+v1.2.0
+-优化内存，减少内存到5K左右。
+
+v1.1.0
+-增加版本信息。
+
+2. 服务类型：RTCM32, RTD，坐标系 8002
+3. SDK消耗资源情况：占用ROM18K左右，占用RAM5K左右.
+4. 发布者邮箱：daniel.chen@wz-inc.com
+5. 技术支持者邮箱：daniel.chen@wz-inc.com
+                   zhe.li@wz-inc.com
+6. SDK集成注意事项：
+   (1).在集成SDK之前，客户需要实现网络socket层，具体函数可以参考《千寻SDK网络层接口指南》和qxwz_socket.h。
+   (2).用户需要实现打印接口函数--extern int qxwz_printf(const char *fmt,...)来实现log 输出。
+   (3).qxwz_tick(system_time)函数驱动整个SDK运行，其间的system_time由用户提供，UTC时间（计于1970年1月1号0零时）（这是绝对时间；相对时间的话，用户确保间隔）
+   
+7.SDK接口简要介绍
+
+   (1). 客户头文件：
+   qxwz_sdk.h
+   qxwz_types.h
+   qxwz_status.h
+   (2). 客户调用SDK最重要的几个接口：
+   qxwz_s32_t qxwz_setting(const qxwz_usr_config_t* config, qxwz_bool_t isRealtime)	
+   -配置用户账号信息
+   -其参数qxwz_usr_config_t* config，希望指向一个静态存储区，生命周期与程序同始终
+   -参数isRealtime表示时间模式，如果可以提供系统时间也就是绝对时间，参数isRealtime设置为TRUE，
+   如果不能提供系统时间，可以提供相对时间给SDK，参数isRealtime设置为FALSE。
+
+   qxwz_s32_t qxwz_start(qxwz_data_response_t * data_rsp, qxwz_status_response_t * status_rsp)
+   -用户启动SDK服务
+   -data_rsp中，描述了不同的数据类型qxwz_data_type_e，差分数据用户关心RTCM_TYPE_RAW即可
+
+   qxwz_s32_t qxwz_tick(qxwz_u32_t system_time)
+   -SDK驱动函数，用户可将之置于线程环境或while(1)中
+   -其参数system_time可以是UTC时间（计于1970年1月1号0零时），也可以是相对时间节拍，一节拍对应1秒时间。
+
+   qxwz_s32_t qxwz_send_data(const void *data, qxwz_u32_t size, qxwz_udata_type_e type)
+   -客户通过此函数向SDK注入数据，比如GGA
+   -其支持数据类型为qxwz_udata_type_e，一般客户仅支持UDATA_GGA
+
+   qxwz_void_t qxwz_stop(void)
+   -停止/释放SDK资源
+   qxwz_void_t qxwz_release(void)
+   释放用户账号信息
+   
+   getqxwzAccount(void)
+   获取用户账户信息
+
+   数据回调函数static void receive_iprtcm(qxwz_void_t *rtcm, qxwz_u32_t len, qxwz_data_type_e type)中的qxwz_data_type_e 
+   建议选用RTCM_TYPE_RAW
